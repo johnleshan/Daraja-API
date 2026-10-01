@@ -1,0 +1,11 @@
+.env
+.env.*
+**/.env
+**/.env.*
+*.log
+**/logs/
+**/data/
+**/*.json.bak
+*~
+.DS_Store
+Thumbs.db

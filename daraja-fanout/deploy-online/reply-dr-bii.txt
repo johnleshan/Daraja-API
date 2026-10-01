@@ -1,0 +1,39 @@
+Here's how transactions.php closes the relay loop.
+
+The paybill's money trail now lands on your domain (callback.php -> mysql). But your
+local machines are the opposite problem: they have no public IP, they power off, they
+sit behind NAT/CG-NAT. So the domain can never "push" to them - not 100% reliable, not
+firewall-friendly.
+
+So we flip the direction: the local machines PULL from the domain.
+
+transactions.php is just a tiny, credentialed SELECT over your own DB:
+
+    GET https://www.keneniacademy.sc.ke/transactions.php?since=<cursor>&limit=1000
+
+- cursor = the newest trans_time the local machine has already synced (stored in a tiny
+  state file)
+- returns only rows newer than the cursor, oldest-first, JSON
+- Basic auth (API_USER/API_PASS), always on HTTPS
+- the result is upserted locally by id (the same Safaricom PK), so a re-run can't
+  double-count anything
+
+Why this is the right shape:
+
+1. The domain and its DB are always on, so they're the source of truth. Safaricom
+   writes there 24/7 whether or not a local laptop is awake.
+2. Local machines are readers, not listeners: no static IP, no port forward, no VPN,
+   no firewall exceptions - exactly the problem we wanted to avoid.
+3. Offline is fine by construction: machine off for a week? Its next pull sends
+   everything since its cursor in one go - nothing missed, nothing duplicated.
+4. MySQL never leaves your hosting: the local machines only ever see rows through
+   this credentialed HTTPS SELECT - your DB creds stay local to your hosting panel.
+
+So the trio is: callback.php = Safaricom's writing clerk (always on),
+transactions.php = the librarian who serves copies to whoever asks, with a bookmark,
+local workers = the clerks who copy new entries into their notebooks whenever they
+show up for work, exactly once.
+
+Once you set API_USER/API_PASS, the local side starts pulling automatically every
+60s, and the last piece (register-urls, once you enable M-Pesa C2B on the app) makes
+Safaricom feed your callback.php live.

@@ -1,0 +1,6 @@
+# Kill directory listing site-wide + deny sensitive file types
+Options -Indexes
+
+<FilesMatch "\.(log|json|csv|ini|env|bak|sql|old|tmp|ini)$">
+  Require all denied
+</FilesMatch>
