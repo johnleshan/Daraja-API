@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 $env = parse_ini_file('C:\Users\JOHN LESHAN\Documents\PROJECTS\Daraja-API\daraja-fanout\middleware\.env');
-$env['PUBLIC_URL'] = 'https://www.keneniacademy.sc.ke/callback_on.php';
+$env['PUBLIC_URL'] = 'https://YOUR-CALLBACK-DOMAIN/callback_on.php';
 $base = ($env['MPESA_ENV'] ?? 'production') === 'sandbox' ? 'https://sandbox.safaricom.co.ke' : 'https://api.safaricom.co.ke';
 
 $ch = curl_init($base . '/oauth/v1/generate?grant_type=client_credentials');
@@ -15,8 +15,8 @@ if ($http !== 200 || empty($tok['access_token'])) { echo "OAUTH FAILED http=$htt
 $payload = [
     'ShortCode' => $env['PAYBILL'] ?? '324364',
     'ResponseType' => 'Completed',
-    'ConfirmationURL' => 'https://www.keneniacademy.sc.ke/callback_on.php',
-    'ValidationURL' => 'https://www.keneniacademy.sc.ke/callback_on.php',
+    'ConfirmationURL' => 'https://YOUR-CALLBACK-DOMAIN/callback_on.php',
+    'ValidationURL' => 'https://YOUR-CALLBACK-DOMAIN/callback_on.php',
 ];
 $ch = curl_init($base . '/mpesa/c2b/v1/registerurl');
 curl_setopt_array($ch, [

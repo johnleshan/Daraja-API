@@ -9,7 +9,7 @@ So we flip the direction: the local machines PULL from the domain.
 
 transactions.php is just a tiny, credentialed SELECT over your own DB:
 
-    GET https://www.keneniacademy.sc.ke/transactions.php?since=<cursor>&limit=1000
+    GET https://yourdomain/transactions.php?since=<cursor>&limit=1000
 
 - cursor = the newest trans_time the local machine has already synced (stored in a tiny
   state file)

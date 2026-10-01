@@ -1,19 +1,19 @@
-NEXT STEP — relay online ledger -> local machines (30 minutes, one time)
+NEXT STEP ??? relay online ledger -> local machines (30 minutes, one time)
 
 == On Dr Bii's domain (he does this) ==
 1. Upload transactions.php to public_html (next to callback.php).
 2. In transactions.php CONFIG: set DB_HOST/DB_NAME/DB_USER/DB_PASS to the same
-   values as callback.php. Choose API_USER + API_PASS (a strong password) — then
+   values as callback.php. Choose API_USER + API_PASS (a strong password) ??? then
    send you those two.
 3. Test in browser (it will ask for the user/pass):
-   https://www.keneniacademy.sc.ke/transactions.php?limit=5
+   https://yourdomain/transactions.php?limit=5
    -> JSON with the CHECKDIAL1 row confirms the read side works.
 
 acknowledgment: tell him NOT to share that password publicly and that it should be different from his cPanel password.
 
 == On your local machine (you do this) ==
 1. Edit daraja-fanout\local\.env:
-      ONLINE_URL=https://www.keneniacademy.sc.ke/transactions.php
+      ONLINE_URL=https://yourdomain/transactions.php
       ONLINE_USER=<he sends you>
       ONLINE_PASS=<he sends you>
       SYNC_INTERVAL_SEC=60
